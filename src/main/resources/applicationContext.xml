@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	<context:component-scan base-package="ojy.spring.web"></context:component-scan>
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	<context:property-placeholder location="classpath:config/database.properties"/>	
+	<!-- 데이터소스 등록 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+	 <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+	  <property name="url" value="jdbc:oracle:thin:@localhost:1521/XEPDB1"/>
+	   <property name="username" value="mytest"/>
+	    <property name="password" value="mytest"/>
+	     </bean>
+	     
+	      <!-- 스프링 JDBC 설정 -->
+	 <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+	 	<property name="dataSource" ref="dataSource"/>
+	 </bean>
+	        
+	     <!-- 트랜잭션 설정 -->
+	     <bean id = "txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	     	<property name="dataSource" ref="dataSource"></property>
+	     </bean>
+	 
+	 <tx:advice id="txAdvice" transaction-manager="txManager">
+	 	<tx:attributes>
+	 		<tx:method name="get*" read-only="true" />
+	 		<tx:method name="*" />
+	 	</tx:attributes>
+	 </tx:advice>
+	 
+	 <aop:config>
+	 	<aop:pointcut expression="execution(* ojy.spring.web..*(..))" id="txPointcut" />
+	 	<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
+	 </aop:config>
+
+	
+	<!--  <bean id="myLifeBean" class="ojy.spring.lifecycle.MyLifeBeanImpl" init-method="init">
+		<property name ="greeting"><value>Hello, </value></property>
+	</bean>
+	<bean class="ojy.spring.lifecycle.CustomBeanPostProcessor"/>-->
+	
+	<!--  <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	<bean id="userService" class="ojy.spring.web.user.impl.UserServiceImpl">
+		<property name="userDAO" ref="userDAO"/>
+	</bean> 
+	 
+	<bean id="userDAO" class="ojy.spring.web.user.impl.UserDAO"></bean>
+	<bean id="log" class="ojy.spring.web.common.Log4jAdvice"></bean>
+	<bean id="before" class="ojy.spring.web.common.BeforeAdvice"></bean>
+	<bean id="afterReturning" class="ojy.spring.web.common.AfterReturningAdvice"></bean>
+	<bean id="afterThrowing" class="ojy.spring.web.common.AfterThrowingAdvice"></bean>
+	<bean id="after" class="ojy.spring.web.common.AfterAdvice"></bean>
+	<bean id="around" class="ojy.spring.web.common.AroundAdvice"></bean>
+	 
+	 <aop:config>
+	  <aop:pointcut expression="execution(* ojy.spring.web..*Impl.*(..))" id="allPointcut"/>
+	  <aop:pointcut expression="execution(* ojy.spring.web..*Impl.get*(..))" id="getPointcut"/>
+	 <aop:aspect ref="afterThrowing">
+	    	<aop:after-throwing method="exceptionLog" pointcut-ref="allPointcut"/>
+	  </aop:aspect>
+	  <aop:aspect ref = "after">
+	  	<aop:after method="finallyLog" pointcut-ref="allPointcut"/>
+	  </aop:aspect>
+	  <aop:aspect ref = "around">
+	  	<aop:around method="aroundLog" pointcut-ref="allPointcut"/>
+	  </aop:aspect> 
+	  
+	  <aop:aspect ref="around">
+	  	<aop:around method="aroundLog" pointcut-ref="getPointcut"/>
+	  </aop:aspect>
+	 </aop:config> -->
+</beans>
