@@ -3,10 +3,6 @@
     pageEncoding="UTF-8"%>
 <%@ page import="ojy.spring.web.board.impl.BoardDAO" %>
 <%@ page import="ojy.spring.web.board.BoardVO" %>
-<%
-	BoardVO board = (BoardVO)session.getAttribute("board");
-
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,27 +13,27 @@
 <h1>글 상세</h1>
 <a href="logout.do">Log Out</a><hr>
 <form action="updateBoard.do" method="post">
-<input name="seq" type="hidden" value="<%=board.getSeq() %>"/> <!-- 글 수정하기 위해 원래 글의 primary key인 글번호를 알고 있어야한다 -->
+<input name="seq" type="hidden" value="${board.seq }"/> <!-- 글 수정하기 위해 원래 글의 primary key인 글번호를 알고 있어야한다 -->
 <table border="1">
 	<tr>
 		<td>제목</td>
-		<td><input name="title" type="text" value="<%=board.getTitle() %>"/></td>
+		<td><input name="title" type="text" value="${board.title }" /></td>
 	</tr>
 	<tr>
 		<td>작성자</td>
-		<td><%=board.getWriter() %></td>
+		<td>${board.writer }</td>
 	</tr>
 	<tr>
 		<td>내용</td>
-		<td><textarea name="content"><%=board.getContent() %></textarea></td>
+		<td><textarea name="content">${board.content }</textarea></td>
 	</tr>
 	<tr>
 		<td>등록일</td>
-		<td><%=board.getRegDate() %></td>
+		<td>${board.regDate }</td>
 	</tr>
 	<tr>
 		<td>조회수</td>
-		<td><%=board.getCnt() %></td>
+		<td>${board.cnt }</td>
 	</tr>
 	<tr>
 		<td colspan="2"><input type="submit" value="글수정"/></td>
@@ -45,7 +41,7 @@
 </table>
 </form><hr>
 <a href="insertBoard.jsp">글등록</a>&nbsp;&nbsp;&nbsp;
-<a href="deleteBoard.do?seq=<%=board.getSeq()%>">글삭제</a>&nbsp;&nbsp;&nbsp;
+<a href="deleteBoard.do?seq=${board.seq }">글삭제</a>&nbsp;&nbsp;&nbsp;
 <a href="getBoardList.do">글목록</a>
 </body>
 </html>
