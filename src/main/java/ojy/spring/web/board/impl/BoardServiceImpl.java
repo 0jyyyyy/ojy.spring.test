@@ -1,3 +1,4 @@
+/*
 package ojy.spring.web.board.impl;
 
 import java.util.List;
@@ -37,3 +38,4 @@ public class BoardServiceImpl implements BoardService {
 		return boardDAO.getBoardList(vo);
 		}
 }
+*/

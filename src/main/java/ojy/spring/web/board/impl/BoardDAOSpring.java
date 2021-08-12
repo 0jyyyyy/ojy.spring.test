@@ -1,3 +1,4 @@
+/*
 package ojy.spring.web.board.impl;
 
 import java.util.List;
@@ -43,3 +44,4 @@ public class BoardDAOSpring {
 		return jdbcTemplate.query(BOARD_LIST, new BoardRowMapper());
 	}
 }
+*/
